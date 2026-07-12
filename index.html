@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ফ্রি ভিডিও ডাউনলোডার</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <!-- হেডার সেকশন -->
+        <header>
+            <h1>Universal <span class="highlight">Video Downloader</span></h1>
+            <p>যেকোনো সোশ্যাল মিডিয়া ভিডিওর লিঙ্ক পেস্ট করুন এবং অ্যাপের ঝামেলা ছাড়াই ডাউনলোড করুন!</p>
+        </header>
+
+        <!-- ইনপুট ও অ্যাকশন বক্স -->
+        <div class="downloader-box">
+            <input type="text" id="videoUrl" placeholder="ভিডিওর লিঙ্কটি এখানে পেস্ট করুন...">
+            <button id="downloadBtn" onclick="downloadVideo()">ডাউনলোড লিঙ্ক তৈরি করুন</button>
+        </div>
+
+        <!-- লোডিং অ্যানিমেশন -->
+        <div id="loader" class="loader" style="display: none;"></div>
+
+        <!-- রেজাল্ট এবং ডাউনলোড বাটন সেকশন -->
+        <div id="resultBox" class="result-box" style="display: none;">
+            <h3>আপনার ভিডিওটি রেডি হয়েছে!</h3>
+            <div id="downloadLinks"></div>
+        </div>
+    </div>
+
+    <!-- ফুটার -->
+    <footer>
+        <p>&copy; 2026 ভিডিও ডাউনলোডার | সার্ভারলেস ও সম্পূর্ণ ফ্রি</p>
+    </footer>
+
+    <!-- জাভাস্ক্রিপ্ট লজিক (অ্যাপ ওপেনিং সমস্যা ফিক্সড) -->
+    <script>
+        function downloadVideo() {
+            const urlInput = document.getElementById('videoUrl').value.trim();
+            const btn = document.getElementById('downloadBtn');
+            const loader = document.getElementById('loader');
+            const resultBox = document.getElementById('resultBox');
+            const linksContainer = document.getElementById('downloadLinks');
+
+            if (!urlInput) {
+                alert('দয়া করে একটি সঠিক ভিডিও লিঙ্ক পেস্ট করুন!');
+                return;
+            }
+
+            // ইন্টারফেস লোডিং স্টেট
+            btn.disabled = true;
+            btn.innerText = 'লিঙ্ক প্রসেস হচ্ছে...';
+            loader.style.with = 'block';
+            loader.style.display = 'block';
+            resultBox.style.display = 'none';
+            linksContainer.innerHTML = '';
+
+            // সার্ভার ছাড়া ফাইল ডিরেক্ট করার জন্য সেভফ্রম ওয়েব গেটওয়ে ট্রিক
+            setTimeout(() => {
+                loader.style.display = 'none';
+                btn.disabled = false;
+                btn.innerText = 'ডাউনলোড লিঙ্ক তৈরি করুন';
+                resultBox.style.display = 'block';
+                
+                // এই লিঙ্ক ফরম্যাটটি মোবাইল অ্যাপকে বাইপাস করে সরাসরি ব্রাউজারে ডাউনলোড পেজ খোলে
+                const finalDownloadUrl = `https://savefrom.net/?url=${encodeURIComponent(urlInput)}`;
+
+                // বাটন রেন্ডারিং
+                linksContainer.innerHTML = `
+                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 15px;">নিচের বাটনে ক্লিক করলেই ব্রাউজারে ডাউনলোড অপশন চলে আসবে।</p>
+                    <a href="${finalDownloadUrl}" target="_blank" class="dl-link btn-hd">সরাসরি ডাউনলোড করুন</a>
+                `;
+            }, 1200); // ১.২ সেকেন্ডের স্মুথ ট্রানজিশন লোডার
+        }
+    </script>
+</body>
+</html>
